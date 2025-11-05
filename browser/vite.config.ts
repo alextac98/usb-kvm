@@ -4,10 +4,12 @@ import viteTsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
   plugins: [react(), viteTsconfigPaths()],
+  base: '/',
   server: {
     port: 3001
   },
   build: {
-    chunkSizeWarningLimit: 1024
+    chunkSizeWarningLimit: 1024,
+    outDir: 'dist'
   }
 });
