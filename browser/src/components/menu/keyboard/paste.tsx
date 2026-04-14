@@ -3,14 +3,14 @@ import { ClipboardIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { device } from '@/libs/device';
-import { Modifiers } from '@/libs/device/keyboard.ts';
-import { CharCodes, ShiftChars } from '@/libs/keyboard';
+import { CharCodes, ShiftChars } from '@/libs/keyboard/charCodes.ts';
+import { getModifierBit } from '@/libs/keyboard/keymap.ts';
 
 export const Paste = () => {
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
 
-  async function paste() {
+  async function paste(): Promise<void> {
     if (isLoading) return;
     setIsLoading(true);
 
@@ -21,15 +21,17 @@ export const Paste = () => {
       for (const char of text) {
         const ascii = char.charCodeAt(0);
 
-        const code = CharCodes.get(ascii);
+        const code = CharCodes[ascii];
         if (!code) continue;
 
-        const modifiers = new Modifiers();
-        if ((ascii >= 65 && ascii <= 90) || ShiftChars.has(ascii)) {
-          modifiers.leftShift = true;
+        let modifier = 0;
+        if ((ascii >= 65 && ascii <= 90) || ShiftChars[ascii]) {
+          modifier |= getModifierBit('ShiftLeft');
         }
 
-        await send(modifiers, code);
+        await send(modifier, code);
+        await new Promise((r) => setTimeout(r, 50));
+        await send(0, 0);
       }
     } catch (e) {
       console.log(e);
@@ -38,19 +40,17 @@ export const Paste = () => {
     }
   }
 
-  async function send(modifiers: Modifiers, code: number) {
-    const keys = [0x00, 0x00, code, 0x00, 0x00, 0x00];
-    await device.sendKeyboardData(modifiers, keys);
-
-    await device.sendKeyboardData(new Modifiers(), [0x00, 0x00, 0x00, 0x00, 0x00, 0x00]);
+  async function send(modifier: number, code: number): Promise<void> {
+    const keys = [modifier, 0, code, 0, 0, 0, 0, 0];
+    await device.sendKeyboardData(keys);
   }
 
   return (
     <div
-      className="flex h-[30px] cursor-pointer items-center space-x-1 rounded px-3 text-neutral-300 hover:bg-neutral-700/50"
+      className="flex h-[32px] cursor-pointer items-center space-x-2 rounded px-3 text-neutral-300 hover:bg-neutral-700/50"
       onClick={paste}
     >
-      <ClipboardIcon size={18} />
+      <ClipboardIcon size={16} />
       <span>{t('keyboard.paste')}</span>
     </div>
   );
