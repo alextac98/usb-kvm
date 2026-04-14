@@ -8,3 +8,36 @@
 *.njsproj
 *.sln
 *.sw?
+*.local
+
+# Logs
+*.log
+pnpm-debug.log*
+
+# web frontend
+web/node_modules
+web/dist
+web/web
+
+# browser frontend  
+browser/node_modules
+browser/dist
+
+# desktop app
+desktop/node_modules
+desktop/dist
+desktop/out
+
+# server binary
+NanoKVM-Server
+
+# Build artifacts
+support/sg2002/kvm_system/build
+support/sg2002/kvm_system/dist
+support/sg2002/kvm_system/CMakeLists.txt
+support/sg2002/kvm_vision_test/build
+support/sg2002/kvm_vision_test/dist
+support/sg2002/kvm_vision_test/CMakeLists.txt
+support/sg2002/additional/original
+kvmapp/server/dl_lib
+kvmapp/kvm_system/kvm_system
