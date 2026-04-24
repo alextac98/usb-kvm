@@ -50,9 +50,10 @@ This project is configured to automatically deploy to GitHub Pages when changes 
 If you want to deploy manually or test locally:
 
 1. Execute `pnpm build` to build the project.
-2. Execute `npm install -g http-server` to install http-server.
-3. Execute `http-server dist -p 8080 -a localhost` to run the service.
-4. Open the Chrome browser and visit `http://localhost:8080`.
+2. Execute `pnpm install -g http-server` to install http-server.
+3. Execute `cd dist` to change working directory to `dist/` .
+4. Execute `http-server -p 8080 -a localhost` to run the service.
+5. Open the Chrome browser and visit `http://localhost:8080`.
 
 #### Files Created for GitHub Pages
 
@@ -60,3 +61,12 @@ If you want to deploy manually or test locally:
 - `browser/public/CNAME` - Custom domain configuration
 - Updated `vite.config.ts` with proper base path configuration
 
+### Deploy in Docker
+
+```shell
+git clone https://github.com/sipeed/NanoKVM-USB.git
+cd NanoKVM-USB
+docker-compose up -d
+```
+
+Then visit `http://localhost:9000` in your browser.
